@@ -28,7 +28,45 @@ function draw() {
 function keyPressed() {
     environment.manageInput(keyCode)    
 }
-/**Game object, holds the environment and all the related objects*/
+
+/** Environment object, holds the user interface and the game */
+function Environment(cols,rows){
+    this.init=function(){
+        this.game = new Game(cols,rows);
+        this.game.init() 
+    }
+
+    this.manageInput = function(keyCode){
+        if(this.game.started){
+           this.game.manageInput(keyCode) 
+        }  else if (keyCode === ENTER) {
+            this.game.init();
+            this.game.start();
+        }
+    }
+
+    this.showGameOver=function(){
+        let gameOverMessage = "GAME OVER" 
+        let optionsMessage = "Press ENTER to play again"
+
+        textSize(height / 8);
+        textAlign(CENTER, CENTER);
+        fill(200,0,0);
+        text(gameOverMessage, width*0.1, height/4, width*0.8, height/6);
+        
+        textSize(height / 20);
+        fill(200,180,0);
+        text(optionsMessage, width*0.1, height/2, width*0.8, height/6);
+    }
+    this.draw=function(){
+        if(this.game.started){
+            this.game.draw()    
+        }else{
+            this.showGameOver()
+        }
+    }
+}
+/**Game object, holds the game related objects*/
 function Game(cols,rows){
     started=false
     /* Initialize the snake and the food location */
@@ -70,43 +108,6 @@ function Game(cols,rows){
         fill(255, 0, 200);
         rect(this.food.x, this.food.y, ITEMS_SCALE, ITEMS_SCALE);
 
-    }
-}
-/** Environment object, holds the user interface with game options, credits and maybe score? */
-function Environment(cols,rows){
-    this.init=function(){
-        this.game = new Game(cols,rows);
-        this.game.init() 
-    }
-
-    this.manageInput = function(keyCode){
-        if(this.game.started){
-           this.game.manageInput(keyCode) 
-        }  else if (keyCode === ENTER) {
-            this.game.init();
-            this.game.start();
-        }
-    }
-
-    this.showGameOver=function(){
-        let gameOverMessage = "GAME OVER" 
-        let optionsMessage = "Press ENTER to play again"
-
-        textSize(height / 8);
-        textAlign(CENTER, CENTER);
-        fill(200,0,0);
-        text(gameOverMessage, width*0.1, height/4, width*0.8, height/6);
-        
-        textSize(height / 20);
-        fill(200,180,0);
-        text(optionsMessage, width*0.1, height/2, width*0.8, height/6);
-    }
-    this.draw=function(){
-        if(this.game.started){
-            this.game.draw()    
-        }else{
-            this.showGameOver()
-        }
     }
 }
 /** Snake object, holds position of the snake, speed and every pixel of it */
