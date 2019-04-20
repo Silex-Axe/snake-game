@@ -1,17 +1,7 @@
-/** TODO - 
- * Destruction -> self-eat & border
- *  - self collision -> check head position against every other position of the snake
- *  - border collision -> already fixed with the self collision algorithm :)
- * Not allowed go backwards
- * Add user interface
- * memory optimization: Save only the turning points as long as they are still there
- * Add bonuses (speed, duble score for a period?)
- * Restrict appearece of the food to non occupied spots
- */
 
-//Game framerate
+//Game framerate - Right now is also the speed of the snake
 var FRAME_RATE = 20
-//Scale of the game, the bigger it is, the 'pixels get bigger'
+//Scale of the game, the bigger it is, the 'pixels' get bigger
 var ITEMS_SCALE = 10;
 //Game object, it's all the main game
 var game;
