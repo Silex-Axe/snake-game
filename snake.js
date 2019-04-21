@@ -1,10 +1,14 @@
-
 //Game framerate - Right now is also the speed of the snake
 var FRAME_RATE = 20
 //Scale of the game, the bigger it is, the 'pixels' get bigger
 var ITEMS_SCALE = 10;
 //Game object, it's all the main game
 var game;
+var coin_sound 
+
+function preload() {
+    coin_sound  = loadSound('assets/coin.mp3');
+}
 
 /*Set up the canvas and game objects (Executed by d3)*/
 function setup() {
@@ -19,7 +23,7 @@ function setup() {
 
 
 
-//Draw every tick of the clock (FRAME_RATE)
+/*Draw every tick of the clock (FRAME_RATE)*/
 function draw() {
     background(51);
     environment.draw()
@@ -29,8 +33,11 @@ function keyPressed() {
     environment.manageInput(keyCode)    
 }
 
-/** Environment object, holds the user interface and the game */
+/** 
+ * Environment object, holds the user interface and the game 
+ * */
 function Environment(cols,rows){
+
     this.init=function(){
         this.game = new Game(cols,rows);
         this.game.init() 
@@ -55,7 +62,7 @@ function Environment(cols,rows){
         text(gameOverMessage, width*0.1, height/4, width*0.8, height/6);
         
         textSize(height / 20);
-        fill(200,180,0);
+        fill(200,0,180);
         text(optionsMessage, width*0.1, height/2, width*0.8, height/6);
     }
     this.draw=function(){
@@ -66,7 +73,9 @@ function Environment(cols,rows){
         }
     }
 }
-/**Game object, holds the game related objects*/
+/**
+ * Game object, holds the game related objects
+ * */
 function Game(cols,rows){
     started=false
     /* Initialize the snake and the food location */
@@ -92,7 +101,7 @@ function Game(cols,rows){
             this.snake.dir(-1, 0);
         }
     }
-/* draw the components of the game */
+/* Draw the components of the game */
     this.draw = function(){
         if(this.started){
          this.snake.update();
@@ -100,17 +109,24 @@ function Game(cols,rows){
         this.snake.show();
         if (this.snake.eat(this.food)) {
             this.pickFoodLocation();
+            if (coin_sound.isPlaying()) {
+                coin_sound.stop();
+              } 
+            coin_sound.play();
+              
         }
         if(this.snake.checkSelfCollision()){
             this.started = false;
         }
 
-        fill(255, 0, 200);
+        fill(255, 200, 0);
         rect(this.food.x, this.food.y, ITEMS_SCALE, ITEMS_SCALE);
 
     }
 }
-/** Snake object, holds position of the snake, speed and every pixel of it */
+/** 
+ * Snake object, holds position of the snake, speed and every pixel of it 
+ * */
 function Snake() {
     this.x = 0;
     this.y = 0;
