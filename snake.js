@@ -1,13 +1,17 @@
 //Game framerate - Right now is also the speed of the snake
-var FRAME_RATE = 20
+const FRAME_RATE = 20
 //Scale of the game, the bigger it is, the 'pixels' get bigger
-var ITEMS_SCALE = 10;
-//Game object, it's all the main game
-var game;
-var coin_sound 
+const ITEMS_SCALE = 10;
 
+const COIN_SOUND_PATH = 'assets/coin.mp3'
+const GAME_FONT_PATH = 'assets/game_over.ttf'
+//Game object, it's all the main game
+let game;
+let coin_sound 
+let game_font
 function preload() {
-    coin_sound  = loadSound('assets/coin.mp3');
+    coin_sound  = loadSound(COIN_SOUND_PATH);
+    game_font = loadFont(GAME_FONT_PATH);
 }
 
 /*Set up the canvas and game objects (Executed by d3)*/
@@ -55,13 +59,13 @@ function Environment(cols,rows){
     this.showGameOver=function(){
         let gameOverMessage = "GAME OVER" 
         let optionsMessage = "Press ENTER to play again"
-
-        textSize(height / 8);
+        textFont(game_font);
+        textSize(height / 6);
         textAlign(CENTER, CENTER);
         fill(200,0,0);
         text(gameOverMessage, width*0.1, height/4, width*0.8, height/6);
         
-        textSize(height / 20);
+        textSize(height / 10);
         fill(200,0,180);
         text(optionsMessage, width*0.1, height/2, width*0.8, height/6);
     }
