@@ -5,13 +5,16 @@ const ITEMS_SCALE = 10;
 const BASIC_FOOD_SCORE = 10;
 
 const COIN_SOUND_PATH = 'assets/coin.mp3'
+const GAME_OVER_SOUND_PATH = 'assets/game_over.mp3'
 const GAME_FONT_PATH = 'assets/game_over.ttf'
 //Game object, it's all the main game
 let game;
 let coin_sound 
+let game_over_sound
 let game_font
 function preload() {
     coin_sound  = loadSound(COIN_SOUND_PATH);
+    game_over_sound  = loadSound(GAME_OVER_SOUND_PATH);
     game_font = loadFont(GAME_FONT_PATH);
 }
 
@@ -57,7 +60,7 @@ function Environment(cols,rows){
         }
     }
 
-    this.showGameOver=function(){
+    this.showGameOver=function(){ 
         let gameOverMessage = "GAME OVER" 
         let optionsMessage = "Press ENTER to play again"
         textFont(game_font);
@@ -111,7 +114,7 @@ function Game(cols,rows){
         }
     }
     
-/* Draw the components of the game */
+    /* Draw the components of the game */
     this.draw = function(){
         if (this.snake.eat(this.food)) {
             this.pickFoodLocation();
@@ -125,6 +128,10 @@ function Game(cols,rows){
          this.snake.update();
         }
         if(this.snake.checkSelfCollision()){
+            if (game_over_sound.isPlaying()) {
+                game_over_sound.stop();
+            }
+            game_over_sound.play();
             this.started = false;
         }
     
@@ -170,7 +177,7 @@ function Snake() {
         }
     }
 
-    this.checkSelfCollision = function(){    
+    this.checkSelfCollision = function(){
         let same = this.tail.slice(1).find((v)=>this.tail[0].x==v.x && this.tail[0].y==v.y)
         return same!=undefined;
     }
@@ -181,7 +188,6 @@ function Snake() {
             this.tail[i] = this.tail[i - 1];
             }
         this.tail[0] = createVector(this.x, this.y)
-
         // New head point
         this.x = this.x + this.xspeed * ITEMS_SCALE;
         this.y = this.y + this.yspeed * ITEMS_SCALE;
@@ -191,7 +197,10 @@ function Snake() {
 
     this.show = function () {
         fill(255)
-        for (var i = 0; i < this.tail.length ; i++)
+        
+        for (let i = 0; i < this.tail.length ; i++)
             rect(this.tail[i].x, this.tail[i].y, ITEMS_SCALE, ITEMS_SCALE)
         }
 }
+
+// possible directions (0,1) (1,0) (0,-1) (-1,0)
